@@ -1,0 +1,37 @@
+{
+  "name": "3km-saint-etienne",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "donnees": "node scripts/gpx-to-geojson.mjs && node scripts/timeline.mjs && node scripts/photos.mjs",
+    "upload": "node scripts/upload-cloudinary.mjs",
+    "esquisses": ".venv/bin/python -I scripts/esquisses.py"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0"
+  },
+  "devDependencies": {
+    "@tmcw/togeojson": "^7.1.2",
+    "@turf/turf": "^7.4.0",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@xmldom/xmldom": "^0.9.12",
+    "cloudinary": "^2.11.0",
+    "dotenv": "^18.0.5",
+    "exifr": "^7.1.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

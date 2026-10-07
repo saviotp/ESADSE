@@ -1,0 +1,542 @@
+/* ───────── Couleurs et typographie : à toi de les changer ───────── */
+:root {
+  --fond: #f4f1ea;
+  --encre: #1c1b19;
+  --doux: #6f6a60;
+  --chemin-1: #d6452b; /* 1er chemin (rouge) */
+  --chemin-2: #2b5fd6; /* 2e chemin (bleu) */
+  --droite: #1c1b19; /* la ligne droite */
+  --epingle: #c8102e; /* tête des épingles */
+  --cercle: #c8102e; /* le cercle dessiné autour de l'épingle active */
+  --police: 'Montserrat', system-ui, sans-serif;
+  --police-titre: 'Oswald', 'Arial Narrow', sans-serif;
+  --marge: clamp(16px, 3vw, 40px);
+  /* l'encoche et la barre du bas des téléphones */
+  --bas-securise: env(safe-area-inset-bottom, 0px);
+}
+/* À tester : ?police=arvo dans l'adresse (voir src/components/ChoixPolice.tsx) */
+:root[data-police='arvo'] {
+  --police-titre: 'Arvo', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+/* Sur téléphone, 100dvh suit la barre d'adresse qui apparaît / disparaît */
+#root {
+  height: 100dvh;
+}
+
+body {
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--police);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.ecran {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ───────── Bouton « suivant » : coin inférieur droit, partout ───────── */
+.bouton-suivant {
+  position: fixed;
+  right: var(--marge);
+  bottom: calc(var(--marge) + var(--bas-securise));
+  z-index: 1500;
+  min-height: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--encre);
+  border-radius: 999px;
+  background: var(--encre);
+  color: var(--fond);
+  transition: transform 0.15s;
+}
+.bouton-suivant:hover {
+  transform: translateX(4px);
+}
+
+/* ───────── 1. Intro ───────── */
+.intro {
+  display: grid;
+  place-items: center;
+  padding: var(--marge);
+}
+.intro .fond {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3; /* storyboard : image à 30 % */
+}
+.intro .texte {
+  position: relative;
+  max-width: 34rem;
+  text-align: center;
+}
+.intro h1 {
+  font-family: var(--police-titre);
+  font-size: clamp(4rem, 18vw, 10rem);
+  margin: 0;
+  line-height: 1;
+}
+.intro .sur-titre {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+}
+
+/* ───────── La carte (commun) ───────── */
+.carte {
+  position: relative;
+  overflow: hidden;
+  background: #e8e4da;
+}
+.carte-interieur,
+.carte-interieur .leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+.carte .leaflet-container {
+  background: #e8e4da;
+}
+.carte .attribution {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  z-index: 500;
+  font-size: 10px;
+  color: var(--doux);
+}
+
+/* Carte horizontale : tournée de -90° (nord à gauche), comme les fiches Visorando.
+   Le cadre intérieur a les dimensions inversées (largeur ↔ hauteur) avant la rotation. */
+.carte-horizontale {
+  container-type: size;
+}
+.carte-horizontale .carte-interieur {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100cqh;
+  height: 100cqw;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+.pin-visorando.pivot svg {
+  transform-origin: 17px 46px; /* la pointe */
+  transform: rotate(90deg);
+}
+.pin-visorando svg {
+  overflow: visible;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.3));
+}
+
+.trace {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.trace-1 {
+  stroke: var(--chemin-1);
+  stroke-width: 4;
+  stroke-opacity: 0.85;
+}
+.trace-2 {
+  stroke: var(--chemin-2);
+  stroke-width: 4;
+  stroke-opacity: 0.85;
+}
+.trace-droite {
+  stroke: var(--droite);
+  stroke-width: 3;
+}
+
+/* Cadenas : coin supérieur droit de la carte */
+.cadenas {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--encre);
+  border-radius: 50%;
+  background: var(--fond);
+  color: var(--encre);
+}
+.cadenas[aria-pressed='true'] {
+  background: var(--encre);
+  color: var(--fond);
+}
+
+/* ───────── 2 et 3. Carte horizontale (80 %) + texte (20 %) ───────── */
+.ecran-carte {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+.ecran-carte .carte {
+  height: 100%;
+}
+.texte-lateral {
+  align-self: center;
+  padding: var(--marge);
+  padding-bottom: 6rem; /* laisse la place au bouton */
+  font-family: var(--police-titre);
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  line-height: 1.3;
+}
+
+/* ───────── 4 →. Parcours : contenu à gauche, carte verticale à droite ───────── */
+.parcours {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 34vw);
+}
+.parcours .contenu {
+  min-height: 0;
+  background: var(--encre);
+}
+.parcours .carte {
+  height: 100%;
+}
+
+/* Épingles de détective */
+.epingle {
+  color: var(--epingle);
+}
+.epingle .corps {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.35));
+  transition: transform 0.15s;
+}
+.epingle:hover .corps {
+  transform: translateY(-3px);
+}
+.epingle .numero {
+  display: none; /* change en « block » pour voir les numéros */
+}
+.epingle .cercle {
+  position: absolute;
+  left: -28px;
+  top: -29px;
+  width: 80px;
+  height: 80px;
+  color: var(--cercle);
+  stroke-dasharray: 260;
+  animation: dessiner 0.6s ease-out;
+}
+@keyframes dessiner {
+  from {
+    stroke-dashoffset: 260;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Une image cliquable (s'ouvre en grand) : remplit son cadre */
+.image-cliquable {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.image-cliquable img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.image-cliquable:focus-visible {
+  outline: 3px solid var(--fond);
+  outline-offset: -6px;
+}
+
+/* Départ et arrivée : une seule photo, plein cadre */
+.photo-seule {
+  height: 100%;
+  margin: 0;
+}
+
+/* Les deux photos : 2e chemin en haut (bleu, à gauche sur la carte), 1er en bas (rouge, à droite) */
+.fiche-point {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  height: 100%;
+  padding: 6px;
+}
+.fiche-point .photo {
+  position: relative;
+  margin: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 3px solid;
+}
+.fiche-point .chemin-1 {
+  border-color: color-mix(in srgb, var(--chemin-1) 70%, transparent);
+}
+.fiche-point .chemin-2 {
+  border-color: color-mix(in srgb, var(--chemin-2) 70%, transparent);
+}
+
+/* ───────── Pénultième : merci ───────── */
+.merci {
+  display: grid;
+  place-items: center;
+  padding: var(--marge);
+  text-align: center;
+}
+.merci p {
+  max-width: 22ch;
+  font-family: var(--police-titre);
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+
+/* ───────── Dernier : processus ───────── */
+.processus {
+  overflow-y: auto;
+  padding: var(--marge);
+  padding-bottom: calc(6rem + var(--bas-securise));
+}
+.processus h1 {
+  font-family: var(--police-titre);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  margin: 0 0 1rem;
+}
+.processus header p {
+  max-width: 60ch;
+  line-height: 1.6;
+}
+.processus h2 {
+  margin-top: 3rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.technologies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem 2rem;
+}
+.technologies dt {
+  font-weight: 600;
+}
+.technologies dd {
+  margin: 0.2rem 0 0;
+  color: var(--doux);
+}
+.dossiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--marge);
+}
+.dossier h3 {
+  padding-bottom: 0.4rem;
+  border-bottom: 3px solid;
+  font-weight: 600;
+}
+.dossier.chemin-1 h3 {
+  border-color: var(--chemin-1);
+}
+.dossier.chemin-2 h3 {
+  border-color: var(--chemin-2);
+}
+.dossier ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+/* dans les galeries, c'est le format qui donne la hauteur (pas le cadre) */
+.dossier .image-cliquable,
+.esquisses .image-cliquable {
+  height: auto;
+}
+.dossier .image-cliquable {
+  aspect-ratio: 1;
+}
+
+/* Esquisses Supernote : pages en paysage, dessin au trait */
+.seance h3 {
+  font-weight: 600;
+}
+.esquisses {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--marge);
+  padding: 0;
+  list-style: none;
+}
+.esquisses .image-cliquable {
+  aspect-ratio: 4 / 3;
+  border: 1px solid color-mix(in srgb, var(--encre) 20%, transparent);
+  background: #fff;
+}
+.esquisses .image-cliquable img {
+  object-fit: contain;
+}
+.esquisses span {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--doux);
+}
+.dossier span {
+  font-size: 0.8rem;
+}
+.recommencer {
+  margin-top: 3rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--encre);
+  border-radius: 999px;
+  background: none;
+}
+
+/* ───────── Visionneuse : une image en grand, par-dessus tout ───────── */
+.visionneuse {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(0 0 0 / 0.92);
+  color: #fff;
+}
+.visionneuse::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+.visionneuse[open] {
+  display: grid;
+  place-items: center;
+}
+.visionneuse img {
+  max-width: calc(100vw - 2 * var(--marge));
+  max-height: calc(100dvh - 7rem);
+  object-fit: contain;
+  cursor: zoom-out;
+}
+.visionneuse .legende {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(1rem + var(--bas-securise));
+  margin: 0;
+  text-align: center;
+  font-family: var(--police-titre);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+}
+.visionneuse button {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.4);
+  color: #fff;
+  font-size: 1.3rem;
+}
+.visionneuse button:hover {
+  background: #fff;
+  color: #000;
+}
+.visionneuse .fermer {
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+}
+.visionneuse .precedente,
+.visionneuse .suivante {
+  top: 50%;
+  translate: 0 -50%;
+}
+.visionneuse .precedente {
+  left: 12px;
+}
+.visionneuse .suivante {
+  right: 12px;
+}
+
+/* ───────── Provisoire : choisir la police des titres (?police=arvo) ───────── */
+.choix-police {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  display: flex;
+  border: 1px solid var(--encre);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fond);
+  font-size: 0.75rem;
+}
+.choix-police button {
+  padding: 0.35rem 0.8rem;
+  border: 0;
+  background: none;
+  color: var(--encre);
+}
+.choix-police button[aria-pressed='true'] {
+  background: var(--encre);
+  color: var(--fond);
+}
+.choix-police button:nth-child(1) {
+  font-family: 'Oswald', sans-serif;
+}
+.choix-police button:nth-child(2) {
+  font-family: 'Arvo', serif;
+}
+
+/* ───────── Mobile ───────── */
+@media (max-width: 760px) {
+  .ecran-carte {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  .texte-lateral {
+    padding-bottom: 5rem;
+  }
+  /* photos en haut (60 %), carte en bas (40 %) */
+  .parcours {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) 40%;
+  }
+  .bouton-suivant {
+    padding: 0.6rem 1.2rem;
+  }
+  /* sur un petit écran, les flèches de la visionneuse descendent sous l'image */
+  .visionneuse .precedente,
+  .visionneuse .suivante {
+    top: auto;
+    bottom: calc(3.5rem + var(--bas-securise));
+    translate: none;
+  }
+  .dossiers {
+    grid-template-columns: 1fr;
+  }
+}

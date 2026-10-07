@@ -1,0 +1,28 @@
+{
+  "paires": [
+    {
+      "chemin1": 2,
+      "chemin2": 32
+    },
+    {
+      "chemin1": 6,
+      "chemin2": 36
+    },
+    {
+      "chemin1": 23,
+      "chemin2": 42
+    },
+    {
+      "chemin1": 24,
+      "chemin2": 45
+    },
+    {
+      "chemin1": 25,
+      "chemin2": 47
+    },
+    {
+      "chemin1": 28,
+      "chemin2": 52
+    }
+  ]
+}

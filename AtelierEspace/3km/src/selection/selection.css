@@ -1,0 +1,193 @@
+.selection {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  height: 100%;
+  font-size: 13px;
+}
+.selection aside {
+  overflow-y: auto;
+  padding: 12px;
+  border-right: 1px solid #0002;
+}
+.selection header {
+  position: sticky;
+  top: -12px;
+  background: var(--fond);
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1;
+}
+.selection h1 {
+  font-size: 18px;
+  margin: 0;
+}
+.selection h2 {
+  font-size: 13px;
+  margin: 16px 0 8px;
+}
+.selection .ok {
+  color: green;
+  font-weight: 600;
+}
+.selection .message {
+  color: var(--doux);
+}
+.grille {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.vignette {
+  padding: 0;
+  border: 3px solid transparent;
+  background: none;
+  text-align: left;
+  font-size: 11px;
+}
+.vignette img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+.vignette.sans-position img {
+  outline: 2px dashed orange;
+  outline-offset: -2px;
+}
+.vignette.utilisee {
+  opacity: 0.45;
+}
+.vignette.choisie {
+  border-color: var(--encre);
+}
+.vignette.active {
+  border-color: orange;
+  opacity: 1;
+}
+.selection main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+}
+.selection .outils {
+  padding: 12px;
+  border-top: 1px solid #0002;
+}
+.selection .outils label {
+  margin-left: 12px;
+}
+.apercu {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.apercu .moitie {
+  width: 160px;
+  height: 100px;
+  position: relative;
+}
+.apercu .moitie img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.apercu .moitie span {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  background: #fffc;
+  padding: 0 4px;
+}
+.apercu .vide {
+  display: grid;
+  place-items: center;
+  border: 1px dashed #0004;
+  color: var(--doux);
+  text-align: center;
+  padding: 8px;
+}
+.paires {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 12px 0 0;
+  padding: 0 0 4px;
+  list-style: none;
+}
+.paires li {
+  flex: none;
+  display: grid;
+  grid-template-columns: 70px;
+  gap: 3px;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #fff8;
+}
+.paires li.active {
+  border-color: orange;
+}
+.paires .numero {
+  font-weight: 600;
+}
+.paires .mini {
+  margin: 0;
+  border-left: 3px solid;
+}
+.paires .mini.chemin-1 {
+  border-color: var(--chemin-1);
+}
+.paires .mini.chemin-2 {
+  border-color: var(--chemin-2);
+}
+.paires .mini img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.paires figcaption {
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.paires .supprimer {
+  border: 1px solid crimson;
+  border-radius: 4px;
+  background: none;
+  color: crimson;
+  font-size: 11px;
+}
+.paires .supprimer:hover {
+  background: crimson;
+  color: #fff;
+}
+.marqueur.photo.chemin-1 {
+  border-color: var(--chemin-1);
+}
+.marqueur.photo.chemin-2 {
+  border-color: var(--chemin-2);
+}
+.marqueur.photo.actif {
+  background: orange;
+  border-color: orange;
+}
+.marqueur.etape {
+  background: var(--encre);
+  color: var(--fond);
+}
+.carte-selection {
+  height: 100%;
+}
+.marqueur {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--fond);
+  color: var(--encre);
+  border: 2px solid var(--encre);
+  font: 600 11px/1 var(--police);
+}
