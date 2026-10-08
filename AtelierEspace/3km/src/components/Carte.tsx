@@ -46,9 +46,11 @@ export function Carte({ traces: visibles, children, horizontale, cadenas, intera
           attributionControl={false}
         >
           <TileLayer url={IGN} maxZoom={19} />
-          {visibles.includes('chemin1') && <Polyline positions={traces.chemin1} pathOptions={{ className: 'trace trace-1' }} />}
-          {visibles.includes('chemin2') && <Polyline positions={traces.chemin2} pathOptions={{ className: 'trace trace-2' }} />}
-          {visibles.includes('droite') && <Polyline positions={[D, A]} pathOptions={{ className: 'trace trace-droite' }} />}
+          {/* className en prop directe : Leaflet ne lit la classe qu'à la création du tracé
+              (avec pathOptions, elle n'arrivait qu'en dev, grâce au double montage du StrictMode) */}
+          {visibles.includes('chemin1') && <Polyline positions={traces.chemin1} className="trace trace-1" />}
+          {visibles.includes('chemin2') && <Polyline positions={traces.chemin2} className="trace trace-2" />}
+          {visibles.includes('droite') && <Polyline positions={[D, A]} className="trace trace-droite" />}
           <Interactions libre={libre} cadre={cadre} />
           {onClic && <Clics onClic={onClic} />}
           {children}

@@ -11,6 +11,10 @@ const TECHNOLOGIES = [
   ['Vite', 'outil de développement'],
   ['Leaflet + Plan IGN', 'la carte'],
   ['GitHub + Vercel', 'code source et mise en ligne'],
+  [
+    'Intelligence artificielle : Claude Opus 5.5 (Anthropic)',
+    'assistant de programmation (Claude Code) : écriture du code avec moi, scripts de données, mise en ligne',
+  ],
 ]
 
 // Les pages de la note Supernote (public/media/esquisses/<page>.png, voir npm run esquisses).
@@ -19,25 +23,25 @@ const SEANCES = [
   {
     titre: 'Séance 4 — 01.10.2026',
     pages: [
-      [2, 'La route, et ce qu’on voit de chaque côté'],
-      [3, 'Numérique : la ligne D → A, les kilomètres, les photos'],
-      [4, 'Physique : « Sainté, sentiment et conflit »'],
-      [5, 'Physique : un livre de Sainté'],
-      [6, 'La vidéo et la carte'],
-      [7, 'Deux images, l’une sur l’autre'],
-      [8, 'La fin'],
+      [2, 'La première idée, une manière plus immersive de raconter'],
+      [3, 'Le plan initial : après une conversation avec le professeur'],
+      [4, 'Physique : « Sainté, sentiment et conflit », un livre sur le contraste de la ville'],
+      [5, 'Physique : « Livre-Jeu de rôle de Sainté », reconter la histoire de la marche de manière immersive aussi'],
+      [6, 'La vidéo et la carte, idée changer de plan, solement une image'],
+      [7, 'Deux images, l’une sur l’autre, comparation entre les differentes marches, sur le architecture et ambiance'],
+      [8, 'La fin, idée changer de plan aussi'],
     ],
   },
   {
     titre: 'Storyboard — 02.10.2026',
     pages: [
-      [10, 'Bienvenue à Saint-Étienne'],
-      [11, 'C’est le chemin…'],
-      [12, 'Il y a deux chemins'],
+      [10, 'première wireframe du site'],
+      [11, ' « C’est le chemin… », une idée de narration immersive'],
+      [12, ' « Il y a deux chemins »'],
       [13, 'Le départ'],
-      [14, 'Chez moi, la rue, marcher, image suivante'],
+      [14, 'Chez moi, la rue, marcher, image suivante, storyboard du video que foi descarté'],
       [15, 'Les deux images et la carte'],
-      [16, 'Je suis arrivé !'],
+      [16, 'Le fin de la journée'],
     ],
   },
 ] as const
